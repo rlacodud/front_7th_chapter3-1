@@ -30,10 +30,18 @@
   --color-muted: var(--gray-500);
 
   /* Alert backgrounds */
+  --color-alert-danger: var(--red-50);
   --color-alert-info: var(--blue-50);
   --color-alert-success: var(--green-50);
   --color-alert-warning: var(--orange-50);
-  --color-alert-error: var(--red-50);
+  --color-alert-muted: var(--gray-100);
+
+  /* Alert borders (for border-{name} utilities) */
+  --color-alert-danger-border: var(--red-200);
+  --color-alert-success-border: var(--green-200);
+  --color-alert-info-border: var(--blue-200);
+  --color-alert-warning-border: var(--orange-200);
+  --color-alert-muted-border: var(--gray-400);
 
   /* Table backgrounds */
   --color-table-row: var(--gray-50);
@@ -56,6 +64,18 @@
   --color-text-secondary: var(--gray-700);
   --color-text-tertiary: var(--gray-550);
   --color-text-disabled: var(--gray-500);
+  --color-success-alert-foreground: var(--green-900);
+  --color-danger-alert-foreground: var(--red-500);
+  --color-warning-alert-foreground: var(--orange-500);
+  --color-info-alert-foreground: var(--blue-400);
+  --color-muted-alert-foreground: var(--gray-700);
+
+  /* Card title colors (for variant-specific card titles) */
+  --color-card-title-info: var(--blue-400);
+  --color-card-title-success: var(--green-500);
+  --color-card-title-warning: var(--orange-500);
+  --color-card-title-danger: var(--red-500);
+  --color-card-title-muted: var(--gray-700);
 
   /* ============================================
   Colors - Borders
