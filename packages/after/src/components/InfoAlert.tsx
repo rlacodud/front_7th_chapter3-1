@@ -1,8 +1,8 @@
 import { Check, X } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "./atoms";
+import { Button } from "@/components/ui/button";
 
-interface AlertProps {
+interface InfoAlertProps {
   variant:
     | "success"
     | "danger"
@@ -11,17 +11,19 @@ interface AlertProps {
     | "muted"
     | null
     | undefined;
-  title?: string;
-  description?: string;
+  title: string;
+  description: string;
+  onClose: () => void;
 }
 
-export const InfoAlert: React.FC<AlertProps> = ({
+export const InfoAlert: React.FC<InfoAlertProps> = ({
   variant,
   title,
   description,
+  onClose,
 }) => {
   return (
-    <div className="grid w-full max-w-xl items-start gap-4">
+    <div className="grid w-full items-start gap-4">
       <Alert variant={variant}>
         <Check />
         <div>
@@ -29,7 +31,7 @@ export const InfoAlert: React.FC<AlertProps> = ({
           <AlertDescription>{description}</AlertDescription>
         </div>
         <div className="ml-auto">
-          <Button>
+          <Button variant="icon" onClick={onClose}>
             <X />
           </Button>
         </div>
