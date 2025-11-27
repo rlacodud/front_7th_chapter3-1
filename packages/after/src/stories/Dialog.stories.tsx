@@ -13,14 +13,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { InputField } from "@/components/InputField";
 
-const variantOptions = [
-  "success",
-  "danger",
-  "warning",
-  "info",
-  "muted",
-] as const;
-
 const meta = {
   title: "UI/Dialog",
   component: Dialog,
