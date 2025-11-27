@@ -51,9 +51,7 @@ jobs:
           NODE_ENV: production
 
       - name: Build Storybook
-        run: |
-          cd packages/after
-          pnpm run build-storybook -- --output-dir storybook-static
+        run: pnpm run build-storybook
         env:
           NODE_ENV: production
 
