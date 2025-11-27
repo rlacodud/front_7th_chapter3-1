@@ -11,5 +11,9 @@ const config: StorybookConfig = {
     name: "@storybook/react-vite",
     options: {},
   },
+  // GitHub Pages 서브 디렉토리 배포를 위한 base 경로 설정
+  ...(process.env.NODE_ENV === "production" && {
+    staticDirs: ["../public"],
+  }),
 };
 export default config;

@@ -45,10 +45,22 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build
+      - name: Build app
         run: pnpm run build:after
         env:
           NODE_ENV: production
+
+      - name: Build Storybook
+        run: |
+          cd packages/after
+          pnpm run build-storybook -- --output-dir storybook-static
+        env:
+          NODE_ENV: production
+
+      - name: Copy Storybook to dist
+        run: |
+          mkdir -p packages/after/dist/storybook
+          cp -r packages/after/storybook-static/* packages/after/dist/storybook/
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -56,7 +68,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          # after의 빌드 산출물 업로드
+          # after의 빌드 산출물 업로드 (앱 + 스토리북)
           path: "./packages/after/dist"
 
       - name: Deploy to GitHub Pages
