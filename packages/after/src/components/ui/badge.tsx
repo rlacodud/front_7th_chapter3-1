@@ -9,7 +9,7 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary",
+        primary: "bg-primary",
         success: "bg-success",
         danger: "bg-danger",
         warning: "bg-warning",
@@ -22,7 +22,7 @@ const badgeVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "default",
+      variant: "primary",
       radius: "default",
     },
   }

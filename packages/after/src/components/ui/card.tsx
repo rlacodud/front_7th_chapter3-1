@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const cardVariants = cva(
-  "bg-card text-card-foreground rounded-xl border py-3 px-[15px] shadow-sm",
+  "bg-app-card text-app-card-foreground rounded-xl border py-3 px-[15px] shadow-sm",
   {
     variants: {
       variant: {
@@ -55,7 +55,7 @@ function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="card-title"
       className={cn(
         "leading-none font-bold text-2xl",
-        "[color:var(--card-title-color,var(--color-card-foreground))]",
+        "[color:var(--card-title-color,var(--color-app-card-foreground))]",
         className
       )}
       {...props}
@@ -67,7 +67,11 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-description"
-      className={cn("text-sm", "[color:var(--color-text-tertiary)]", className)}
+      className={cn(
+        "text-sm",
+        "[color:var(--color-app-text-tertiary)]",
+        className
+      )}
       {...props}
     />
   );
