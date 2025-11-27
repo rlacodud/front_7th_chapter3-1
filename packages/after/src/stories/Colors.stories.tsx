@@ -19,7 +19,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Gray Scale
+// Gray Scale (primitive.css에서 최신 값 반영)
 const grayScale = {
   name: "Gray",
   colors: [
@@ -38,7 +38,7 @@ const grayScale = {
   ],
 };
 
-// Chromatic Colors
+// Chromatic Colors (primitive.css에서 최신 값 반영)
 const chromaticScales = [
   {
     name: "Blue",
@@ -81,6 +81,7 @@ const chromaticScales = [
       { label: "500", value: "#d32f2f", variable: "--red-500" },
       { label: "600", value: "#c62828", variable: "--red-600" },
       { label: "900", value: "#b71c1c", variable: "--red-900" },
+      { label: "alt-500", value: "#ef4444", variable: "--red-alt-500" },
     ],
   },
 ];
@@ -115,25 +116,25 @@ export const AllPrimitive: Story = {
   },
 };
 
-// Semantic Colors
+// Semantic Colors (index.css의 최신 토큰 반영)
 const semanticScales = [
   {
     name: "Backgrounds",
     colors: [
       {
-        label: "Background",
+        label: "App Background",
         value: "#ffffff",
-        variable: "--color-background",
+        variable: "--color-app-background",
       },
       {
-        label: "Muted",
+        label: "App Background Muted",
         value: "#fafafa",
-        variable: "--color-background-muted",
+        variable: "--color-app-background-muted",
       },
       {
-        label: "Card",
+        label: "App Card",
         value: "#ffffff",
-        variable: "--color-card",
+        variable: "--color-app-card",
       },
       {
         label: "Primary",
@@ -173,25 +174,60 @@ const semanticScales = [
     ],
   },
   {
+    name: "Alert Backgrounds",
+    colors: [
+      {
+        label: "Alert Danger",
+        value: "#ffebee",
+        variable: "--color-alert-danger",
+      },
+      {
+        label: "Alert Info",
+        value: "#e3f2fd",
+        variable: "--color-alert-info",
+      },
+      {
+        label: "Alert Success",
+        value: "#e8f5e9",
+        variable: "--color-alert-success",
+      },
+      {
+        label: "Alert Warning",
+        value: "#fff3e0",
+        variable: "--color-alert-warning",
+      },
+      {
+        label: "Alert Muted",
+        value: "#f5f5f5",
+        variable: "--color-alert-muted",
+      },
+    ],
+  },
+  {
     name: "Text",
     colors: [
       {
-        label: "Foreground",
+        label: "App Foreground",
         value: "#333333",
-        variable: "--color-foreground",
+        variable: "--color-app-foreground",
       },
       {
-        label: "Secondary",
+        label: "App Text Secondary",
         value: "#424242",
-        variable: "--color-text-secondary",
+        variable: "--color-app-text-secondary",
       },
       {
-        label: "Tertiary",
+        label: "App Text Tertiary",
         value: "#666666",
-        variable: "--color-text-tertiary",
+        variable: "--color-app-text-tertiary",
       },
       {
-        label: "Disabled",
+        label: "App Muted Foreground",
+        value: "#424242",
+        variable: "--color-app-muted-foreground",
+      },
+      {
+        label: "Text Disabled",
         value: "#757575",
         variable: "--color-text-disabled",
       },
@@ -206,24 +242,49 @@ const semanticScales = [
         variable: "--color-border",
       },
       {
-        label: "Light",
+        label: "Border Light",
         value: "#dddddd",
         variable: "--color-border-light",
       },
       {
-        label: "Primary",
+        label: "Border Primary",
         value: "#1565c0",
         variable: "--color-border-primary",
       },
       {
-        label: "Danger",
+        label: "Border Danger",
         value: "#c62828",
         variable: "--color-border-danger",
       },
       {
-        label: "Success",
+        label: "Border Success",
         value: "#2e7d32",
         variable: "--color-border-success",
+      },
+      {
+        label: "Alert Danger Border",
+        value: "#e57373",
+        variable: "--color-alert-danger-border",
+      },
+      {
+        label: "Alert Success Border",
+        value: "#81c784",
+        variable: "--color-alert-success-border",
+      },
+      {
+        label: "Alert Info Border",
+        value: "#90caf9",
+        variable: "--color-alert-info-border",
+      },
+      {
+        label: "Alert Warning Border",
+        value: "#ffb74d",
+        variable: "--color-alert-warning-border",
+      },
+      {
+        label: "Alert Muted Border",
+        value: "#bdbdbd",
+        variable: "--color-alert-muted-border",
       },
     ],
   },
@@ -235,4 +296,3 @@ export const Semantic: Story = {
     scales: semanticScales,
   },
 };
-
