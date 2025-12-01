@@ -33,6 +33,9 @@ export const useManagementPage = () => {
   const [editOpen, setEditOpen] = useState(false);
   const [alert, setAlert] = useState<AlertState>(null);
   const [loading, setLoading] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<
+    Partial<Record<keyof ManagementFormData, string>>
+  >({});
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -102,10 +105,19 @@ export const useManagementPage = () => {
           [name]: value,
         }) as ManagementFormData
     );
+    // 필드 값이 변경되면 해당 필드의 에러 제거
+    if (fieldErrors[name]) {
+      setFieldErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
   };
 
   const openCreateDialog = () => {
     setFormData(getInitialFormData(entityType));
+    setFieldErrors({});
     setCreateOpen(true);
   };
 
@@ -135,6 +147,7 @@ export const useManagementPage = () => {
   const closeCreateDialog = () => {
     setCreateOpen(false);
     setFormData(getInitialFormData(entityType));
+    setFieldErrors({});
   };
 
   const closeEditDialog = () => {
@@ -144,6 +157,37 @@ export const useManagementPage = () => {
   };
 
   const createEntity = async () => {
+    setFieldErrors({});
+
+    // 클라이언트 사이드 필수 필드 검증
+    const newFieldErrors: Partial<Record<keyof ManagementFormData, string>> =
+      {};
+
+    if (entityType === "user") {
+      if (!formData.username || formData.username.trim() === "") {
+        newFieldErrors.username = "사용자명을 입력해주세요.";
+      }
+      if (!formData.email || formData.email.trim() === "") {
+        newFieldErrors.email = "이메일을 입력해주세요.";
+      }
+    } else {
+      if (!formData.title || formData.title.trim() === "") {
+        newFieldErrors.title = "제목을 입력해주세요.";
+      }
+      if (!formData.author || formData.author.trim() === "") {
+        newFieldErrors.author = "작성자를 입력해주세요.";
+      }
+      if (!formData.content || formData.content.trim() === "") {
+        newFieldErrors.content = "내용을 입력해주세요.";
+      }
+    }
+
+    // 필수 필드 검증 실패 시 에러 표시하고 생성 중단
+    if (Object.keys(newFieldErrors).length > 0) {
+      setFieldErrors(newFieldErrors);
+      return;
+    }
+
     try {
       if (entityType === "user") {
         await userService.create({
@@ -170,9 +214,44 @@ export const useManagementPage = () => {
         } 생성되었습니다.`,
       });
     } catch (error: any) {
+      const errorMessage = error?.message ?? "생성에 실패했습니다.";
+      const serverFieldErrors: Partial<
+        Record<keyof ManagementFormData, string>
+      > = {};
+
+      // 사용자 생성 시 필드별 에러 처리
+      if (entityType === "user") {
+        if (errorMessage.includes("Username")) {
+          serverFieldErrors.username = "이미 사용 중인 사용자명입니다.";
+        }
+        if (errorMessage.includes("Email")) {
+          serverFieldErrors.email = "이미 사용 중인 이메일입니다.";
+        }
+      } else {
+        // 게시글 생성 시 필드별 에러 처리
+        if (errorMessage.includes("Title")) {
+          serverFieldErrors.title = "제목은 최소 5자 이상이어야 합니다.";
+        }
+        if (errorMessage.includes("Content")) {
+          serverFieldErrors.content = "내용을 입력해주세요.";
+        }
+        if (errorMessage.includes("Author")) {
+          serverFieldErrors.author = "작성자를 입력해주세요.";
+        }
+        if (errorMessage.includes("Category")) {
+          serverFieldErrors.category = "카테고리를 선택해주세요.";
+        }
+      }
+
+      if (Object.keys(serverFieldErrors).length > 0) {
+        setFieldErrors(serverFieldErrors);
+        return; // 필드 에러가 있으면 alert를 표시하지 않음
+      }
+
+      // 필드별 에러가 아닌 경우에만 alert 표시
       setAlert({
         type: "danger",
-        message: error?.message ?? "생성에 실패했습니다.",
+        message: errorMessage,
       });
     }
   };
@@ -282,5 +361,6 @@ export const useManagementPage = () => {
     goToNextPage,
     pageSize,
     hasPagination,
+    fieldErrors,
   };
 };

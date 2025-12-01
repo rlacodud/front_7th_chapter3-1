@@ -14,12 +14,14 @@ interface EntityFormFieldProps {
   entityType: EntityType;
   formData: ManagementFormData;
   updateField: (name: keyof ManagementFormData, value: string) => void;
+  fieldErrors?: Partial<Record<keyof ManagementFormData, string>>;
 }
 
 export const EntityFormFields = ({
   entityType,
   formData,
   updateField,
+  fieldErrors = {},
 }: EntityFormFieldProps) => {
   if (entityType === "user") {
     return (
@@ -31,6 +33,7 @@ export const EntityFormFields = ({
           required
           value={formData.username ?? ""}
           onChange={(event) => updateField("username", event.target.value)}
+          error={fieldErrors.username}
         />
         <InputField
           name="email"
@@ -40,6 +43,7 @@ export const EntityFormFields = ({
           required
           value={formData.email ?? ""}
           onChange={(event) => updateField("email", event.target.value)}
+          error={fieldErrors.email}
         />
         <div className="grid gap-4 sm:grid-cols-2">
           <SelectFieldRow
@@ -72,6 +76,7 @@ export const EntityFormFields = ({
         required
         value={formData.title ?? ""}
         onChange={(event) => updateField("title", event.target.value)}
+        error={fieldErrors.title}
       />
       <div className="grid gap-4 sm:grid-cols-2">
         <InputField
@@ -81,6 +86,7 @@ export const EntityFormFields = ({
           required
           value={formData.author ?? ""}
           onChange={(event) => updateField("author", event.target.value)}
+          error={fieldErrors.author}
         />
         <SelectFieldRow
           id="post-category"
@@ -107,7 +113,16 @@ export const EntityFormFields = ({
           placeholder="게시글 내용을 입력하세요"
           value={formData.content ?? ""}
           onChange={(event) => updateField("content", event.target.value)}
+          aria-invalid={Boolean(fieldErrors.content)}
+          className={
+            fieldErrors.content
+              ? "border-destructive focus-visible:border-destructive focus-visible:ring-destructive/30"
+              : ""
+          }
         />
+        {fieldErrors.content && (
+          <p className="text-xs text-danger">{fieldErrors.content}</p>
+        )}
       </div>
     </div>
   );

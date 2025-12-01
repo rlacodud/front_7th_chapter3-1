@@ -1,65 +1,12 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { InfoAlert } from "@/components/InfoAlert";
-import { EntityStats } from "@/components/management/EntityStats";
-import { EntityTable } from "@/components/management/EntityTable";
+import { EntityTabContent } from "@/components/management/EntityTabContent";
 import { ManagementFormDialog } from "@/components/management/ManagementFormDialog";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useManagementPage } from "@/hooks/useManagementPage";
 
 export const ManagementPage: React.FC = () => {
-  const {
-    entityType,
-    setEntityType,
-    data,
-    columns,
-    statsCards,
-    formData,
-    updateField,
-    selectedItem,
-    alert,
-    dismissAlert,
-    createOpen,
-    editOpen,
-    openCreateDialog,
-    openEditDialog,
-    closeCreateDialog,
-    closeEditDialog,
-    createEntity,
-    updateEntity,
-    deleteEntity,
-    handlePostStatus,
-    loading,
-    currentPage,
-    totalPages,
-    goToPrevPage,
-    goToNextPage,
-    hasPagination,
-  } = useManagementPage();
-
-  const isUserView = entityType === "user";
-  const handlePrevClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    if (currentPage === 1) {
-      return;
-    }
-    goToPrevPage();
-  };
-
-  const handleNextClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    if (currentPage === totalPages) {
-      return;
-    }
-    goToNextPage();
-  };
+  const management = useManagementPage();
 
   return (
     <div className="min-h-screen py-10">
@@ -74,116 +21,86 @@ export const ManagementPage: React.FC = () => {
                 사용자와 게시글을 관리하세요
               </p>
             </div>
-            <Button onClick={openCreateDialog}>새로 만들기</Button>
+            <Button onClick={management.openCreateDialog}>새로 만들기</Button>
           </div>
         </div>
 
-        <div className="mt-6 flex items-center">
-          <Button
-            variant={entityType === "post" ? "primary" : "secondary"}
-            onClick={() => setEntityType("post")}
-          >
-            게시글
-          </Button>
-          <Button
-            variant={entityType === "user" ? "primary" : "secondary"}
-            onClick={() => setEntityType("user")}
-          >
-            사용자
-          </Button>
-        </div>
-        <section className="space-y-4 rounded-tl-none rounded-tr-none rounded-bl-xl rounded-br-xl border bg-app-background p-4 shadow-sm">
-          {alert && (
-            <InfoAlert
-              variant={alert.type}
-              title={
-                alert.type === "success" ? "작업 완료" : "문제가 발생했어요"
-              }
-              description={alert.message}
-              onClose={dismissAlert}
+        <Tabs
+          value={management.entityType}
+          onValueChange={(value) =>
+            management.setEntityType(value as "post" | "user")
+          }
+          className="mt-6"
+        >
+          <TabsList>
+            <TabsTrigger value="post">게시글</TabsTrigger>
+            <TabsTrigger value="user">사용자</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="post">
+            <EntityTabContent
+              entityType="post"
+              title="게시글 목록"
+              alert={management.alert}
+              dismissAlert={management.dismissAlert}
+              statsCards={management.statsCards}
+              loading={management.loading}
+              columns={management.columns}
+              data={management.data}
+              onEdit={management.openEditDialog}
+              onDelete={management.deleteEntity}
+              onStatusAction={management.handlePostStatus}
+              currentPage={management.currentPage}
+              totalPages={management.totalPages}
+              goToPrevPage={management.goToPrevPage}
+              goToNextPage={management.goToNextPage}
+              hasPagination={management.hasPagination}
             />
-          )}
+          </TabsContent>
 
-          <EntityStats cards={statsCards} />
-
-          <div className="flex items-center justify-between gap-4">
-            <h2 className="text-lg font-semibold text-app-foreground">
-              {isUserView ? "사용자 목록" : "게시글 목록"}
-            </h2>
-            {loading && (
-              <span className="text-sm text-app-muted-foreground">
-                로딩 중...
-              </span>
-            )}
-          </div>
-          <EntityTable
-            entityType={entityType}
-            columns={columns}
-            data={data}
-            onEdit={openEditDialog}
-            onDelete={deleteEntity}
-            onStatusAction={handlePostStatus}
-          />
-          {hasPagination && (
-            <Pagination className="pt-2">
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious
-                    href="#"
-                    onClick={handlePrevClick}
-                    className={
-                      currentPage === 1 ? "pointer-events-none opacity-50" : ""
-                    }
-                    aria-disabled={currentPage === 1}
-                  />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink
-                    href="#"
-                    isActive
-                    onClick={(event) => event.preventDefault()}
-                    className="w-20 justify-center"
-                  >
-                    {currentPage} / {totalPages}
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationNext
-                    href="#"
-                    onClick={handleNextClick}
-                    className={
-                      currentPage === totalPages
-                        ? "pointer-events-none opacity-50"
-                        : ""
-                    }
-                    aria-disabled={currentPage === totalPages}
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          )}
-        </section>
+          <TabsContent value="user">
+            <EntityTabContent
+              entityType="user"
+              title="사용자 목록"
+              alert={management.alert}
+              dismissAlert={management.dismissAlert}
+              statsCards={management.statsCards}
+              loading={management.loading}
+              columns={management.columns}
+              data={management.data}
+              onEdit={management.openEditDialog}
+              onDelete={management.deleteEntity}
+              onStatusAction={management.handlePostStatus}
+              currentPage={management.currentPage}
+              totalPages={management.totalPages}
+              goToPrevPage={management.goToPrevPage}
+              goToNextPage={management.goToNextPage}
+              hasPagination={management.hasPagination}
+            />
+          </TabsContent>
+        </Tabs>
       </div>
 
       <ManagementFormDialog
         mode="create"
-        entityType={entityType}
-        open={createOpen}
-        onClose={closeCreateDialog}
-        onSubmit={createEntity}
-        formData={formData}
-        updateField={updateField}
+        entityType={management.entityType}
+        open={management.createOpen}
+        onClose={management.closeCreateDialog}
+        onSubmit={management.createEntity}
+        formData={management.formData}
+        updateField={management.updateField}
+        fieldErrors={management.fieldErrors}
       />
 
       <ManagementFormDialog
         mode="edit"
-        entityType={entityType}
-        open={editOpen}
-        onClose={closeEditDialog}
-        onSubmit={updateEntity}
-        formData={formData}
-        updateField={updateField}
-        selectedItem={selectedItem}
+        entityType={management.entityType}
+        open={management.editOpen}
+        onClose={management.closeEditDialog}
+        onSubmit={management.updateEntity}
+        formData={management.formData}
+        updateField={management.updateField}
+        selectedItem={management.selectedItem}
       />
     </div>
   );

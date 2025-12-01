@@ -24,6 +24,7 @@ interface ManagementFormDialogProps {
   formData: ManagementFormData;
   updateField: (name: keyof ManagementFormData, value: string) => void;
   selectedItem?: Entity | null;
+  fieldErrors?: Partial<Record<keyof ManagementFormData, string>>;
 }
 
 export const ManagementFormDialog: React.FC<ManagementFormDialogProps> = ({
@@ -35,6 +36,7 @@ export const ManagementFormDialog: React.FC<ManagementFormDialogProps> = ({
   formData,
   updateField,
   selectedItem,
+  fieldErrors = {},
 }) => {
   const isUserView = entityType === "user";
   const title =
@@ -69,6 +71,7 @@ export const ManagementFormDialog: React.FC<ManagementFormDialogProps> = ({
             entityType={entityType}
             formData={formData}
             updateField={updateField}
+            fieldErrors={fieldErrors}
           />
         </div>
 
